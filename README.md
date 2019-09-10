@@ -1,4 +1,12 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# RPN Calculator
+
+Written to learn about React
+
+Resources:
+
+- https://reactjs.org/tutorial/tutorial.html
+- https://play.google.com/store/apps/details?id=com.anaoum.calculator&hl=en
+- https://www.youtube.com/watch?v=m1_ih43p24s
 
 ## Available Scripts
 
