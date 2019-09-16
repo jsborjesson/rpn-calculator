@@ -4,6 +4,7 @@ import './index.css'
 
 const DECIMAL = '.';
 const EMPTY = '0';
+const MINUS = '-';
 const EMPTY_STACK = [EMPTY];
 
 class Calculator extends React.Component {
@@ -17,10 +18,13 @@ class Calculator extends React.Component {
   render() {
     return (
       <div className="calculator">
-        <div className="display">{this.state.stack.join("\n")}</div>
+        <div className="display">{this.state.stack.slice().reverse().map((row, i) =>
+          <div key={i} className="display_row">{row}</div>
+        )}
+        </div>
 
-        <div className="btn operator">C</div>
-        <div className="btn operator">+/-</div>
+        <div className="btn operator" onClick={this.handleClearClicked}>C</div>
+        <div className="btn operator" onClick={this.handleSignClicked}>+/-</div>
         <div className="btn operator">%</div>
         <div className="btn operator">/</div>
 
@@ -41,7 +45,7 @@ class Calculator extends React.Component {
 
         <div className="btn" onClick={this.handleDecimalClicked}>{DECIMAL}</div>
         <div className="btn" onClick={this.handleDigitClicked('0')}>0</div>
-        <div className="btn operator enter">Enter</div>
+        <div className="btn operator enter" onClick={this.handleEnterClicked}>Enter</div>
       </div>
     )
   }
@@ -54,6 +58,22 @@ class Calculator extends React.Component {
 
   handleDecimalClicked = () => {
     this.updateDisplay((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+  }
+
+  handleClearClicked = () => {
+    this.setState({
+      stack: EMPTY_STACK
+    });
+  }
+
+  handleSignClicked = () => {
+    this.updateDisplay((display) => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.substr(1));
+  }
+
+  handleEnterClicked = () => {
+    this.setState({
+      stack: [EMPTY, ...this.state.stack]
+    })
   }
 
   updateDisplay = fn => {
