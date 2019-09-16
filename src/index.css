@@ -12,12 +12,15 @@
   color: white;
   grid-column: 1 / 5;
   text-align: right;
+  padding: 0 5px 0 5px;
+  grid-row: 1 / 5;
 }
 
 .btn {
   border: 1px solid #999;
   background-color: #F2F2F2;
   text-align: center;
+  user-select: none;
 }
 
 .btn.operator {
