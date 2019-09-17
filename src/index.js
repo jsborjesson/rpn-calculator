@@ -15,7 +15,6 @@ class Calculator extends React.Component {
     super(props);
     this.state = {
       stack: EMPTY_STACK,
-      history: [],
     };
   }
 
@@ -61,6 +60,12 @@ class Calculator extends React.Component {
 
   getDisplayRows = () => {
     return [...this.state.stack, ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
+  }
+
+  handleRoll = () => {
+    this.setState({
+      stack: [...this.state.stack.slice(1), this.state.stack[0]],
+    });
   }
 
   handleDigit = digit => {
