@@ -76,7 +76,11 @@ class Calculator extends React.Component {
   }
 
   handleUndo = () => {
-    this.setState(state => ({ historyPosition: state.historyPosition > 0 ? state.historyPosition - 1 : 0}));
+    if (this.historyPosition <= 0) return;
+
+    this.setState(state => ({
+      historyPosition: state.historyPosition - 1
+    }));
   }
 
   handleRedo = () => {
@@ -91,10 +95,10 @@ class Calculator extends React.Component {
     this.setStack(stack => [...stack.slice(1), stack[0]]);
   }
 
-  handleDivision = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
+  handleDivision       = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
   handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
-  handleSubtraction = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
-  handleAddition = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
+  handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
+  handleAddition       = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
 
   digitHandler = digit => {
     return () => {
