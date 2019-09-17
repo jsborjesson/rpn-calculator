@@ -33,26 +33,26 @@ class Calculator extends React.Component {
         <div className="btn operator" onClick={this.handleDivision}>/</div>
 
         <div className="btn operator" onClick={this.handleSwap}>Swap</div>
-        <div className="btn" onClick={this.handleDigit('7')}>7</div>
-        <div className="btn" onClick={this.handleDigit('8')}>8</div>
-        <div className="btn" onClick={this.handleDigit('9')}>9</div>
+        <div className="btn" onClick={this.digitHandler('7')}>7</div>
+        <div className="btn" onClick={this.digitHandler('8')}>8</div>
+        <div className="btn" onClick={this.digitHandler('9')}>9</div>
         <div className="btn operator" onClick={this.handleMultiplication}>*</div>
 
         <div className="btn operator" onClick={this.handleClear}>Clear</div>
-        <div className="btn" onClick={this.handleDigit('4')}>4</div>
-        <div className="btn" onClick={this.handleDigit('5')}>5</div>
-        <div className="btn" onClick={this.handleDigit('6')}>6</div>
+        <div className="btn" onClick={this.digitHandler('4')}>4</div>
+        <div className="btn" onClick={this.digitHandler('5')}>5</div>
+        <div className="btn" onClick={this.digitHandler('6')}>6</div>
         <div className="btn operator" onClick={this.handleSubtraction}>-</div>
 
         <div className="btn operator" onClick={this.handleDrop}>Drop</div>
-        <div className="btn" onClick={this.handleDigit('1')}>1</div>
-        <div className="btn" onClick={this.handleDigit('2')}>2</div>
-        <div className="btn" onClick={this.handleDigit('3')}>3</div>
+        <div className="btn" onClick={this.digitHandler('1')}>1</div>
+        <div className="btn" onClick={this.digitHandler('2')}>2</div>
+        <div className="btn" onClick={this.digitHandler('3')}>3</div>
         <div className="btn operator" onClick={this.handleAddition}>+</div>
 
         <div className="btn operator" onClick={this.handleDelete}>Del</div>
         <div className="btn operator" onClick={this.handleDecimal}>{DECIMAL}</div>
-        <div className="btn" onClick={this.handleDigit('0')}>0</div>
+        <div className="btn" onClick={this.digitHandler('0')}>0</div>
         <div className="btn operator enter" onClick={this.handleEnter}>Enter</div>
       </div>
     )
@@ -68,7 +68,12 @@ class Calculator extends React.Component {
     });
   }
 
-  handleDigit = digit => {
+  handleDivision = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
+  handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
+  handleSubtraction = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
+  handleAddition = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
+
+  digitHandler = digit => {
     return () => {
       this.updateDisplay((display) => display !== EMPTY_DISPLAY ? `${display}${digit}` : digit);
     }
@@ -76,6 +81,19 @@ class Calculator extends React.Component {
 
   handleDecimal = () => {
     this.updateDisplay((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+  }
+
+  handleArithmetic = (fn) => {
+    if (this.state.stack.length < 2) {
+      console.log('You need at least 2 numbers on the stack to perform arithmetic.');
+      return;
+    }
+    const [rhs, lhs] = this.state.stack.slice(0, 2);
+    const result = fn(Number.parseFloat(lhs), Number.parseFloat(rhs));
+
+    this.setState({
+      stack: [result, ...this.state.stack.slice(2)]
+    })
   }
 
   handleClear = () => {
