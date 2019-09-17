@@ -91,7 +91,7 @@ class Calculator extends React.Component {
   }
 
   handleClear = () => {
-    if (this.getStack())
+    if (this.getStack() === EMPTY_STACK) return;
     this.setStack(() => EMPTY_STACK);
   }
 
