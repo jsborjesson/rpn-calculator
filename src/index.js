@@ -81,7 +81,7 @@ class Calculator extends React.Component {
       return;
     }
     const [rhs, lhs] = stack.slice(0, 2);
-    const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs));
+    const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs)).toString();
 
     this.setStack(stack => [result, ...stack.slice(2)])
   }
@@ -132,9 +132,7 @@ class Calculator extends React.Component {
     this.setStack(stack => [stack[1], stack[0], ...stack.slice(2)]);
   }
 
-  getDisplayRows = () => {
-    return [...this.getStack(), ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
-  }
+  getDisplayRows = () => [...this.getStack(), ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
 
   getStack = () => this.state.history[this.state.historyPosition];
 
