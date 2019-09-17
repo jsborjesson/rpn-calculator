@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/rpn-calculator/precache-manifest.a5ec732e16668bf1384315b6b54c6ed8.js"
+  "/rpn-calculator/precache-manifest.a958c77a43e24d229a87a19f5f8622d0.js"
 );
 
 self.addEventListener('message', (event) => {
