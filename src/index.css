@@ -1,7 +1,7 @@
 .calculator {
   margin: 0 auto;
-  width: 600px;
-  font-size: 40px;
+  max-width: 550px;
+  font-size: 30px;
   border: 2px solid black;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -18,9 +18,11 @@
 }
 
 .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #555;
   background-color: #F2F2F2;
-  text-align: center;
   user-select: none;
 }
 
