@@ -59,20 +59,52 @@ class Calculator extends React.Component {
     )
   }
 
-  getDisplayRows = () => {
-    return [...this.getStack(), ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
+  digitHandler = digit => {
+    return () => {
+      this.setBottomRow((display) => display !== EMPTY_BOTTOM_ROW ? `${display}${digit}` : digit);
+    }
   }
 
-  getStack = () => this.state.history[this.state.historyPosition];
+  handleDecimal = () => {
+    this.setBottomRow((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+  }
 
-  setStack = func => {
-    const newStack = func(this.getStack());
-    const newHistory = [...this.state.history.slice(0, this.state.historyPosition + 1), newStack];
+  handleDivision       = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
+  handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
+  handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
+  handleAddition       = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
 
-    this.setState(state => ({
-      history: newHistory,
-      historyPosition: state.historyPosition + 1,
-    }));
+  handleArithmetic = (func) => {
+    const stack = this.getStack()
+    if (stack.length < 2) {
+      console.log('You need at least 2 numbers on the stack to perform arithmetic.');
+      return;
+    }
+    const [rhs, lhs] = stack.slice(0, 2);
+    const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs));
+
+    this.setStack(stack => [result, ...stack.slice(2)])
+  }
+
+  handleSign = () => {
+    this.setBottomRow(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
+  }
+
+  handleClear = () => {
+    if (this.getStack())
+    this.setStack(() => EMPTY_STACK);
+  }
+
+  handleDrop = () => {
+    this.setStack(stack => stack.length === 1 ? EMPTY_STACK : stack.slice(1));
+  }
+
+  handleDelete = () => {
+    this.setBottomRow(display => display.length > 1 ? display.slice(0, -1) : EMPTY_BOTTOM_ROW);
+  }
+
+  handleEnter = () => {
+    this.setStack(stack => [EMPTY_BOTTOM_ROW, ...stack]);
   }
 
   handleUndo = () => {
@@ -100,55 +132,23 @@ class Calculator extends React.Component {
     this.setStack(stack => [stack[1], stack[0], ...stack.slice(2)]);
   }
 
-  handleDivision       = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
-  handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
-  handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
-  handleAddition       = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
-
-  digitHandler = digit => {
-    return () => {
-      this.updateBottomRow((display) => display !== EMPTY_BOTTOM_ROW ? `${display}${digit}` : digit);
-    }
+  getDisplayRows = () => {
+    return [...this.getStack(), ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
   }
 
-  handleDecimal = () => {
-    this.updateBottomRow((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+  getStack = () => this.state.history[this.state.historyPosition];
+
+  setStack = func => {
+    const newStack = func(this.getStack());
+    const newHistory = [...this.state.history.slice(0, this.state.historyPosition + 1), newStack];
+
+    this.setState(state => ({
+      history: newHistory,
+      historyPosition: state.historyPosition + 1,
+    }));
   }
 
-  handleArithmetic = (func) => {
-    const stack = this.getStack()
-    if (stack.length < 2) {
-      console.log('You need at least 2 numbers on the stack to perform arithmetic.');
-      return;
-    }
-    const [rhs, lhs] = stack.slice(0, 2);
-    const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs));
-
-    this.setStack(stack => [result, ...stack.slice(2)])
-  }
-
-  handleSign = () => {
-    this.updateBottomRow(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
-  }
-
-  handleClear = () => {
-    if (this.getStack())
-    this.setStack(() => EMPTY_STACK);
-  }
-
-  handleDrop = () => {
-    this.setStack(stack => stack.length === 1 ? EMPTY_STACK : stack.slice(1));
-  }
-
-  handleDelete = () => {
-    this.updateBottomRow(display => display.length > 1 ? display.slice(0, -1) : EMPTY_BOTTOM_ROW);
-  }
-
-  handleEnter = () => {
-    this.setStack(stack => [EMPTY_BOTTOM_ROW, ...stack]);
-  }
-
-  updateBottomRow = func => {
+  setBottomRow = func => {
     this.setStack(stack =>
       stack.map((item, index) => index === 0 ? func(item) : item)
     );
