@@ -95,6 +95,10 @@ class Calculator extends React.Component {
     this.setStack(stack => [...stack.slice(1), stack[0]]);
   }
 
+  handleSwap = () => {
+    this.setStack(stack => [stack[1], stack[0], ...stack.slice(2)]);
+  }
+
   handleDivision       = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
   handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
   handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
@@ -123,7 +127,7 @@ class Calculator extends React.Component {
   }
 
   handleSign = () => {
-    this.updateDisplay((display) => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.substr(1));
+    this.updateDisplay(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
   }
 
   handleClear = () => {
@@ -135,7 +139,7 @@ class Calculator extends React.Component {
   }
 
   handleDelete = () => {
-    this.updateDisplay((display) => display.length > 1 ? display.slice(0, -1) : EMPTY_DISPLAY);
+    this.updateDisplay(display => display.length > 1 ? display.slice(0, -1) : EMPTY_DISPLAY);
   }
 
   handleEnter = () => {
