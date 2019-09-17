@@ -23,54 +23,59 @@ class Calculator extends React.Component {
         )}
         </div>
 
-        <div className="btn operator" onClick={this.handleClearClicked}>C</div>
-        <div className="btn operator" onClick={this.handleSignClicked}>+/-</div>
-        <div className="btn operator">%</div>
-        <div className="btn operator">/</div>
+        <div className="btn operator" onClick={this.handleRoll}>Roll</div>
+        <div className="btn operator" onClick={this.handleUndo}>Undo</div>
+        <div className="btn operator" onClick={this.handleRedo}>Redo</div>
+        <div className="btn operator" onClick={this.handleSign}>+/-</div>
+        <div className="btn operator" onClick={this.handleDivision}>/</div>
 
-        <div className="btn" onClick={this.handleDigitClicked('7')}>7</div>
-        <div className="btn" onClick={this.handleDigitClicked('8')}>8</div>
-        <div className="btn" onClick={this.handleDigitClicked('9')}>9</div>
-        <div className="btn operator">*</div>
+        <div className="btn operator" onClick={this.handleSwap}>Swap</div>
+        <div className="btn" onClick={this.handleDigit('7')}>7</div>
+        <div className="btn" onClick={this.handleDigit('8')}>8</div>
+        <div className="btn" onClick={this.handleDigit('9')}>9</div>
+        <div className="btn operator" onClick={this.handleMultiplication}>*</div>
 
-        <div className="btn" onClick={this.handleDigitClicked('4')}>4</div>
-        <div className="btn" onClick={this.handleDigitClicked('5')}>5</div>
-        <div className="btn" onClick={this.handleDigitClicked('6')}>6</div>
-        <div className="btn operator">-</div>
+        <div className="btn operator" onClick={this.handleClear}>Clear</div>
+        <div className="btn" onClick={this.handleDigit('4')}>4</div>
+        <div className="btn" onClick={this.handleDigit('5')}>5</div>
+        <div className="btn" onClick={this.handleDigit('6')}>6</div>
+        <div className="btn operator" onClick={this.handleSubtraction}>-</div>
 
-        <div className="btn" onClick={this.handleDigitClicked('1')}>1</div>
-        <div className="btn" onClick={this.handleDigitClicked('2')}>2</div>
-        <div className="btn" onClick={this.handleDigitClicked('3')}>3</div>
-        <div className="btn operator">+</div>
+        <div className="btn operator" onClick={this.handleDrop}>Drop</div>
+        <div className="btn" onClick={this.handleDigit('1')}>1</div>
+        <div className="btn" onClick={this.handleDigit('2')}>2</div>
+        <div className="btn" onClick={this.handleDigit('3')}>3</div>
+        <div className="btn operator" onClick={this.handleAddition}>+</div>
 
-        <div className="btn" onClick={this.handleDecimalClicked}>{DECIMAL}</div>
-        <div className="btn" onClick={this.handleDigitClicked('0')}>0</div>
-        <div className="btn operator enter" onClick={this.handleEnterClicked}>Enter</div>
+        <div className="btn operator" onClick={this.handleDelete}>Del</div>
+        <div className="btn operator" onClick={this.handleDecimal}>{DECIMAL}</div>
+        <div className="btn" onClick={this.handleDigit('0')}>0</div>
+        <div className="btn operator enter" onClick={this.handleEnter}>Enter</div>
       </div>
     )
   }
 
-  handleDigitClicked = digit => {
+  handleDigit = digit => {
     return () => {
       this.updateDisplay((display) => display !== EMPTY ? `${display}${digit}` : digit);
     }
   }
 
-  handleDecimalClicked = () => {
+  handleDecimal = () => {
     this.updateDisplay((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
   }
 
-  handleClearClicked = () => {
+  handleClear = () => {
     this.setState({
       stack: EMPTY_STACK
     });
   }
 
-  handleSignClicked = () => {
+  handleSign = () => {
     this.updateDisplay((display) => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.substr(1));
   }
 
-  handleEnterClicked = () => {
+  handleEnter = () => {
     this.setState({
       stack: [EMPTY, ...this.state.stack]
     })
