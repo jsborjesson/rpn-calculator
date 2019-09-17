@@ -78,12 +78,11 @@ class Calculator extends React.Component {
   handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
   handleAddition       = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
 
-  handleArithmetic = (func) => {
-    const stack = this.getStack()
-    if (stack.length < 2) {
-      console.log('You need at least 2 numbers on the stack to perform arithmetic.');
-      return;
-    }
+  handleArithmetic = func => {
+    const stack = this.getStack();
+
+    if (stack.length < 2) return;
+
     const [rhs, lhs] = stack.slice(0, 2);
     const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs)).toString();
 
@@ -96,6 +95,7 @@ class Calculator extends React.Component {
 
   handleClear = () => {
     if (this.getStack() === EMPTY_STACK) return;
+
     this.setStack(() => EMPTY_STACK);
   }
 
@@ -133,6 +133,7 @@ class Calculator extends React.Component {
 
   handleSwap = () => {
     if (this.getStack().length <= 1) return;
+
     this.setStack(stack => [stack[1], stack[0], ...stack.slice(2)]);
   }
 
@@ -141,11 +142,12 @@ class Calculator extends React.Component {
   getStack = () => this.state.history[this.state.historyPosition];
 
   setStack = func => {
-    const newStack = func(this.getStack());
-    const newHistory = [...this.state.history.slice(0, this.state.historyPosition + 1), newStack];
+    const stack = func(this.getStack());
+    const dropRedoStack = this.state.history.slice(0, this.state.historyPosition + 1)
+    const history = [...dropRedoStack, stack];
 
     this.setState(state => ({
-      history: newHistory,
+      history: history,
       historyPosition: state.historyPosition + 1,
     }));
   }
