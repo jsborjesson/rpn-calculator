@@ -108,7 +108,7 @@ class Calculator extends React.Component {
   }
 
   handleUndo = () => {
-    if (this.historyPosition <= 0) return;
+    if (this.state.historyPosition <= 0) return;
 
     this.setState(state => ({
       historyPosition: state.historyPosition - 1
