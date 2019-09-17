@@ -19,6 +19,10 @@ class Calculator extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
   render() {
     return (
       <div className="calculator">
@@ -150,6 +154,66 @@ class Calculator extends React.Component {
     this.setStack(stack =>
       stack.map((item, index) => index === 0 ? func(item) : item)
     );
+  }
+
+  handleKeyDown = (e) => {
+    console.log(e);
+    switch (e.key) {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        this.digitHandler(e.key)();
+        break;
+      case '.':
+        this.handleDecimal();
+        break;
+      case '+':
+        this.handleAddition();
+        break;
+      case '-':
+        this.handleSubtraction();
+        break;
+      case '*':
+        this.handleMultiplication();
+        break;
+      case '/':
+        this.handleDivision();
+        break;
+      case 'Enter':
+        this.handleEnter();
+        break;
+      case 'Backspace':
+        this.handleDelete();
+        break;
+      case 'r':
+        this.handleRoll();
+        break;
+      case 's':
+        this.handleSwap();
+        break;
+      case 'c':
+        this.handleClear();
+        break;
+      case 'd':
+        this.handleDrop();
+        break;
+      case 'm':
+        this.handleSign();
+        break;
+      case 'z':
+        this.handleUndo();
+        break;
+      case 'y':
+        this.handleRedo();
+        break;
+    }
   }
 }
 
