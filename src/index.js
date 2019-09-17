@@ -151,9 +151,7 @@ class Calculator extends React.Component {
   }
 
   setBottomRow = func => {
-    this.setStack(stack =>
-      stack.map((item, index) => index === 0 ? func(item) : item)
-    );
+    this.setStack(stack => [func(stack[0]), ...stack.slice(1)]);
   }
 
   handleKeyDown = (e) => {
