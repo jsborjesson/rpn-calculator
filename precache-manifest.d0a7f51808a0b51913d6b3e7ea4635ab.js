@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "097c812a32f88364dcdd83b8ce96699b",
+    "revision": "1c6683dc291397c21f48120fb13835f4",
     "url": "/rpn-calculator/index.html"
   },
   {
-    "revision": "839ba608f7a2e1494ee2",
+    "revision": "94c049e4481a5122ca29",
     "url": "/rpn-calculator/static/css/main.1eff8624.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/rpn-calculator/static/js/2.15cee3c1.chunk.js"
   },
   {
-    "revision": "839ba608f7a2e1494ee2",
-    "url": "/rpn-calculator/static/js/main.c2a14af9.chunk.js"
+    "revision": "94c049e4481a5122ca29",
+    "url": "/rpn-calculator/static/js/main.56761347.chunk.js"
   },
   {
     "revision": "7cf0db2b4d4faec4dce2",
