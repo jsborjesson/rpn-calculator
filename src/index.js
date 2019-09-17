@@ -5,9 +5,9 @@ import './index.css'
 const DECIMAL = '.';
 const MINUS = '-';
 const DISPLAY_ROWS = 5;
-const EMPTY_DISPLAY = '0';
+const EMPTY_BOTTOM_ROW = '0';
 const EMPTY_ROW = '\u00A0'; // &nbsp;
-const EMPTY_STACK = [EMPTY_DISPLAY];
+const EMPTY_STACK = [EMPTY_BOTTOM_ROW];
 const DISPLAY_PADDING = Array(DISPLAY_ROWS - 1).fill(EMPTY_ROW);
 
 class Calculator extends React.Component {
@@ -107,12 +107,12 @@ class Calculator extends React.Component {
 
   digitHandler = digit => {
     return () => {
-      this.updateDisplay((display) => display !== EMPTY_DISPLAY ? `${display}${digit}` : digit);
+      this.updateBottomRow((display) => display !== EMPTY_BOTTOM_ROW ? `${display}${digit}` : digit);
     }
   }
 
   handleDecimal = () => {
-    this.updateDisplay((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+    this.updateBottomRow((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
   }
 
   handleArithmetic = (func) => {
@@ -128,10 +128,11 @@ class Calculator extends React.Component {
   }
 
   handleSign = () => {
-    this.updateDisplay(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
+    this.updateBottomRow(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
   }
 
   handleClear = () => {
+    if (this.getStack())
     this.setStack(() => EMPTY_STACK);
   }
 
@@ -140,16 +141,16 @@ class Calculator extends React.Component {
   }
 
   handleDelete = () => {
-    this.updateDisplay(display => display.length > 1 ? display.slice(0, -1) : EMPTY_DISPLAY);
+    this.updateBottomRow(display => display.length > 1 ? display.slice(0, -1) : EMPTY_BOTTOM_ROW);
   }
 
   handleEnter = () => {
-    this.setStack(stack => [EMPTY_DISPLAY, ...stack]);
+    this.setStack(stack => [EMPTY_BOTTOM_ROW, ...stack]);
   }
 
-  updateDisplay = func => {
-    this.setStack(stack => stack.map(
-      (item, index) => index === 0 ? func(item) : item)
+  updateBottomRow = func => {
+    this.setStack(stack =>
+      stack.map((item, index) => index === 0 ? func(item) : item)
     );
   }
 }
