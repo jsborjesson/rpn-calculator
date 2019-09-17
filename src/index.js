@@ -4,7 +4,7 @@ import './index.css'
 
 const DECIMAL = '.';
 const MINUS = '-';
-const DISPLAY_ROWS = 5;
+const DISPLAY_ROWS = 10;
 const EMPTY_BOTTOM_ROW = '0';
 const EMPTY_ROW = '\u00A0'; // &nbsp;
 const EMPTY_STACK = [EMPTY_BOTTOM_ROW];
