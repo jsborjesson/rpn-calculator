@@ -65,13 +65,26 @@ class Calculator extends React.Component {
 
   getStack = () => this.state.history[this.state.historyPosition];
 
-  setStack = fn => {
-    console.log(this.state.history, this.state.historyPosition)
-    const newStack = fn(this.state.history[this.state.historyPosition]);
-    this.setState({
-      history: this.state.history.concat([newStack]),
-      historyPosition: this.state.historyPosition + 1,
-    });
+  setStack = func => {
+    const newStack = func(this.getStack());
+    const newHistory = [...this.state.history.slice(0, this.state.historyPosition + 1), newStack];
+
+    this.setState(state => ({
+      history: newHistory,
+      historyPosition: state.historyPosition + 1,
+    }));
+  }
+
+  handleUndo = () => {
+    this.setState(state => ({ historyPosition: state.historyPosition > 0 ? state.historyPosition - 1 : 0}));
+  }
+
+  handleRedo = () => {
+    if (this.state.historyPosition >= this.state.history.length - 1) return;
+
+    this.setState(state => ({
+      historyPosition: state.historyPosition + 1,
+    }));
   }
 
   handleRoll = () => {
@@ -93,14 +106,14 @@ class Calculator extends React.Component {
     this.updateDisplay((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
   }
 
-  handleArithmetic = (fn) => {
+  handleArithmetic = (func) => {
     const stack = this.getStack()
     if (stack.length < 2) {
       console.log('You need at least 2 numbers on the stack to perform arithmetic.');
       return;
     }
     const [rhs, lhs] = stack.slice(0, 2);
-    const result = fn(Number.parseFloat(lhs), Number.parseFloat(rhs));
+    const result = func(Number.parseFloat(lhs), Number.parseFloat(rhs));
 
     this.setStack(stack => [result, ...stack.slice(2)])
   }
@@ -125,9 +138,9 @@ class Calculator extends React.Component {
     this.setStack(stack => [EMPTY_DISPLAY, ...stack]);
   }
 
-  updateDisplay = fn => {
+  updateDisplay = func => {
     this.setStack(stack => stack.map(
-      (item, index) => index === 0 ? fn(item) : item)
+      (item, index) => index === 0 ? func(item) : item)
     );
   }
 }
