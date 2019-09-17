@@ -96,14 +96,28 @@ class Calculator extends React.Component {
     })
   }
 
+  handleSign = () => {
+    this.updateDisplay((display) => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.substr(1));
+  }
+
   handleClear = () => {
     this.setState({
       stack: EMPTY_STACK
     });
   }
 
-  handleSign = () => {
-    this.updateDisplay((display) => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.substr(1));
+  handleDrop = () => {
+    if (this.state.stack.length === 1) {
+      return this.handleClear();
+    }
+
+    this.setState({
+      stack: this.state.stack.slice(1),
+    })
+  }
+
+  handleDelete = () => {
+    this.updateDisplay((display) => display.length > 1 ? display.slice(0, -1) : EMPTY_DISPLAY);
   }
 
   handleEnter = () => {
