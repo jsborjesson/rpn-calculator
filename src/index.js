@@ -3,22 +3,26 @@ import ReactDOM from 'react-dom'
 import './index.css'
 
 const DECIMAL = '.';
-const EMPTY = '0';
 const MINUS = '-';
-const EMPTY_STACK = [EMPTY];
+const DISPLAY_ROWS = 5;
+const EMPTY_DISPLAY = '0';
+const EMPTY_ROW = '\u00A0'; // &nbsp;
+const EMPTY_STACK = [EMPTY_DISPLAY];
+const DISPLAY_PADDING = Array(DISPLAY_ROWS - 1).fill(EMPTY_ROW);
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stack: EMPTY_STACK
+      stack: EMPTY_STACK,
+      history: [],
     };
   }
 
   render() {
     return (
       <div className="calculator">
-        <div className="display">{this.state.stack.slice().reverse().map((row, i) =>
+        <div className="display">{this.getDisplayRows().map((row, i) =>
           <div key={i} className="display_row">{row}</div>
         )}
         </div>
@@ -55,9 +59,13 @@ class Calculator extends React.Component {
     )
   }
 
+  getDisplayRows = () => {
+    return [...this.state.stack, ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
+  }
+
   handleDigit = digit => {
     return () => {
-      this.updateDisplay((display) => display !== EMPTY ? `${display}${digit}` : digit);
+      this.updateDisplay((display) => display !== EMPTY_DISPLAY ? `${display}${digit}` : digit);
     }
   }
 
@@ -77,7 +85,7 @@ class Calculator extends React.Component {
 
   handleEnter = () => {
     this.setState({
-      stack: [EMPTY, ...this.state.stack]
+      stack: [EMPTY_DISPLAY, ...this.state.stack]
     })
   }
 
