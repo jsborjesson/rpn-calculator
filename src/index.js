@@ -87,7 +87,7 @@ class Calculator extends React.Component {
   }
 
   handleSign = () => {
-    this.setBottomRow(display => display.indexOf(MINUS) === -1 ? `${MINUS}${display}` : display.slice(1));
+    this.setBottomRow(row => row.indexOf(MINUS) === -1 ? `${MINUS}${row}` : row.slice(1));
   }
 
   handleClear = () => {
@@ -100,7 +100,7 @@ class Calculator extends React.Component {
   }
 
   handleDelete = () => {
-    this.setBottomRow(display => display.length > 1 ? display.slice(0, -1) : EMPTY_BOTTOM_ROW);
+    this.setBottomRow(row => row.length > 1 ? row.slice(0, -1) : EMPTY_BOTTOM_ROW);
   }
 
   handleEnter = () => {
