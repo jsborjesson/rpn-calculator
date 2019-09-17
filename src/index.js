@@ -96,6 +96,7 @@ class Calculator extends React.Component {
   }
 
   handleSwap = () => {
+    if (this.getStack().length <= 1) return;
     this.setStack(stack => [stack[1], stack[0], ...stack.slice(2)]);
   }
 
