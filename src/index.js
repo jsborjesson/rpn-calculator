@@ -14,7 +14,8 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      stack: EMPTY_STACK,
+      history: [EMPTY_STACK],
+      historyPosition: 0,
     };
   }
 
@@ -59,13 +60,22 @@ class Calculator extends React.Component {
   }
 
   getDisplayRows = () => {
-    return [...this.state.stack, ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
+    return [...this.getStack(), ...DISPLAY_PADDING].slice(0, DISPLAY_ROWS).reverse();
+  }
+
+  getStack = () => this.state.history[this.state.historyPosition];
+
+  setStack = fn => {
+    console.log(this.state.history, this.state.historyPosition)
+    const newStack = fn(this.state.history[this.state.historyPosition]);
+    this.setState({
+      history: this.state.history.concat([newStack]),
+      historyPosition: this.state.historyPosition + 1,
+    });
   }
 
   handleRoll = () => {
-    this.setState({
-      stack: [...this.state.stack.slice(1), this.state.stack[0]],
-    });
+    this.setStack(stack => [...stack.slice(1), stack[0]]);
   }
 
   handleDivision = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
@@ -84,16 +94,15 @@ class Calculator extends React.Component {
   }
 
   handleArithmetic = (fn) => {
-    if (this.state.stack.length < 2) {
+    const stack = this.getStack()
+    if (stack.length < 2) {
       console.log('You need at least 2 numbers on the stack to perform arithmetic.');
       return;
     }
-    const [rhs, lhs] = this.state.stack.slice(0, 2);
+    const [rhs, lhs] = stack.slice(0, 2);
     const result = fn(Number.parseFloat(lhs), Number.parseFloat(rhs));
 
-    this.setState({
-      stack: [result, ...this.state.stack.slice(2)]
-    })
+    this.setStack(stack => [result, ...stack.slice(2)])
   }
 
   handleSign = () => {
@@ -101,19 +110,11 @@ class Calculator extends React.Component {
   }
 
   handleClear = () => {
-    this.setState({
-      stack: EMPTY_STACK
-    });
+    this.setStack(() => EMPTY_STACK);
   }
 
   handleDrop = () => {
-    if (this.state.stack.length === 1) {
-      return this.handleClear();
-    }
-
-    this.setState({
-      stack: this.state.stack.slice(1),
-    })
+    this.setStack(stack => stack.length === 1 ? EMPTY_STACK : stack.slice(1));
   }
 
   handleDelete = () => {
@@ -121,15 +122,13 @@ class Calculator extends React.Component {
   }
 
   handleEnter = () => {
-    this.setState({
-      stack: [EMPTY_DISPLAY, ...this.state.stack]
-    })
+    this.setStack(stack => [EMPTY_DISPLAY, ...stack]);
   }
 
   updateDisplay = fn => {
-    this.setState(state => ({
-      stack: state.stack.map((item, index) => { return index === 0 ? fn(item) : item; }),
-    }));
+    this.setStack(stack => stack.map(
+      (item, index) => index === 0 ? fn(item) : item)
+    );
   }
 }
 
