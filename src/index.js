@@ -213,6 +213,8 @@ class Calculator extends React.Component {
       case 'y':
         this.handleRedo();
         break;
+      default:
+        break;
     }
   }
 }
