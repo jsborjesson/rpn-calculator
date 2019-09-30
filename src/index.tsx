@@ -41,9 +41,12 @@ class Calculator extends React.Component<IProps, IState> {
   render() {
     return (
       <div className="calculator">
-        <div className="display">{this.getDisplayRows().map((row, i) =>
-          <div key={i} className="display_row">{row}</div>
-        )}
+        <div className="display">
+          {
+            this.getDisplayRows().map((row, i) =>
+              <div key={i} className="display_row">{row}</div>
+            )
+          }
         </div>
 
         <div className="btn operator" onClick={this.handleRoll}>Roll</div>
