@@ -10,8 +10,23 @@ const EMPTY_ROW = '\u00A0'; // &nbsp;
 const EMPTY_STACK = [EMPTY_BOTTOM_ROW];
 const DISPLAY_PADDING = Array(DISPLAY_ROWS - 1).fill(EMPTY_ROW);
 
-class Calculator extends React.Component {
-  constructor(props) {
+
+type Row = string;
+type Stack = Array<Row>;
+
+interface IMutateRow { (row: Row): Row; }
+interface IMutateStack { (stack: Stack): Stack; }
+interface IArithmetic { (lhs: number, rhs: number): number; }
+
+interface IProps {}
+
+interface IState {
+  history: Array<Stack>,
+  historyPosition: number,
+}
+
+class Calculator extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       history: [EMPTY_STACK],
@@ -63,22 +78,22 @@ class Calculator extends React.Component {
     )
   }
 
-  digitHandler = digit => {
+  digitHandler = (digit: string): () => void => {
     return () => {
-      this.setBottomRow((display) => display !== EMPTY_BOTTOM_ROW ? `${display}${digit}` : digit);
+      this.setBottomRow((row: string) => row !== EMPTY_BOTTOM_ROW ? `${row}${digit}` : digit);
     }
   }
 
   handleDecimal = () => {
-    this.setBottomRow((display) => display.indexOf(DECIMAL) === -1 ? `${display}${DECIMAL}` : display);
+    this.setBottomRow((row: string) => row.indexOf(DECIMAL) === -1 ? `${row}${DECIMAL}` : row);
   }
 
-  handleDivision       = () => this.handleArithmetic((lhs, rhs) => lhs / rhs);
-  handleMultiplication = () => this.handleArithmetic((lhs, rhs) => lhs * rhs);
-  handleSubtraction    = () => this.handleArithmetic((lhs, rhs) => lhs - rhs);
-  handleAddition       = () => this.handleArithmetic((lhs, rhs) => lhs + rhs);
+  handleDivision       = () => this.handleArithmetic((lhs: number, rhs: number) => lhs / rhs);
+  handleMultiplication = () => this.handleArithmetic((lhs: number, rhs: number) => lhs * rhs);
+  handleSubtraction    = () => this.handleArithmetic((lhs: number, rhs: number) => lhs - rhs);
+  handleAddition       = () => this.handleArithmetic((lhs: number, rhs: number) => lhs + rhs);
 
-  handleArithmetic = func => {
+  handleArithmetic = (func: IArithmetic) => {
     const stack = this.getStack();
 
     if (stack.length < 2) return;
@@ -141,7 +156,7 @@ class Calculator extends React.Component {
 
   getStack = () => this.state.history[this.state.historyPosition];
 
-  setStack = func => {
+  setStack = (func: IMutateStack) => {
     const stack = func(this.getStack());
     const dropRedoStack = this.state.history.slice(0, this.state.historyPosition + 1)
     const history = [...dropRedoStack, stack];
@@ -152,11 +167,11 @@ class Calculator extends React.Component {
     }));
   }
 
-  setBottomRow = func => {
+  setBottomRow = (func: IMutateRow) => {
     this.setStack(stack => [func(stack[0]), ...stack.slice(1)]);
   }
 
-  handleKeyDown = (e) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     console.log(e);
     switch (e.key) {
       case '0':
